@@ -1,0 +1,44 @@
+<div class="d-flex flex-column align-items-center container h-100 gap-4 mt-4">
+  <div class="text-center">
+    <h2>CHOOSE YOUR RESOURCE</h2>
+    <div class="d-flex gap-3">
+      <button (click)="setFightingResource(RESOURCES.STARSHIPS)"
+              [disabled]="!(results | async)?.starshipsResults?.length"
+              color="primary"
+              extended mat-fab>
+        <mat-icon>rocket</mat-icon>
+        Starships
+      </button>
+
+      <button (click)="setFightingResource(RESOURCES.PEOPLE)"
+              [disabled]="!(results | async)?.peopleResults?.length"
+              color="primary"
+              extended
+              mat-fab>
+        <mat-icon>people</mat-icon>
+        People
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="fightingResource">
+    <div class="text-center">{{score.roundResult}}</div>
+    <div class="d-flex justify-content-around gap-3">
+      <span>Player one: {{score.playerOne}} points</span>
+
+      <span>Player two: {{score.playerTwo}} points</span>
+    </div>
+    <div class="d-flex gap-3">
+      <ng-container *ngIf="fightingResource === RESOURCES.PEOPLE && (personDuelers | async) as personDuelers">
+        <app-resource-card [loading]="personDuelers.isLoading" [person]="personDuelers.data[0]"/>
+        <app-resource-card [loading]="personDuelers.isLoading" [person]="personDuelers.data[1]"/>
+      </ng-container>
+
+      <ng-container *ngIf="fightingResource === RESOURCES.STARSHIPS && (starshipDuelers | async) as loadedStarships">
+        <app-resource-card [loading]="loadedStarships.isLoading" [starship]="loadedStarships.data[0]"/>
+        <app-resource-card [loading]="loadedStarships.isLoading" [starship]="loadedStarships.data[1]"/>
+      </ng-container>
+    </div>
+  </div>
+</div>
+

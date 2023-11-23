@@ -1,0 +1,8 @@
+.card {
+  height: 125px;
+  min-width: 250px;
+
+  @container (min-width: 700px) {
+    min-width: 170px;
+  }
+}
