@@ -1,9 +1,10 @@
-<div class="d-flex flex-column align-items-center container h-100 gap-4 mt-4">
+<div class="d-flex flex-column align-items-center h-100 gap-4 mt-4">
   <div class="text-center">
     <h2>CHOOSE YOUR RESOURCE</h2>
     <div class="d-flex gap-3">
       <button (click)="setFightingResource(RESOURCES.STARSHIPS)"
-              [disabled]="!(results | async)?.starshipsResults?.length"
+              [attr.data-tests]="'player-one-button'"
+              [disabled]="!($results | async)?.starshipsResults?.length || ($starshipDueler | async)?.isLoading || ($peopleDuelers | async)?.isLoading"
               color="primary"
               extended mat-fab>
         <mat-icon>rocket</mat-icon>
@@ -11,7 +12,8 @@
       </button>
 
       <button (click)="setFightingResource(RESOURCES.PEOPLE)"
-              [disabled]="!(results | async)?.peopleResults?.length"
+              [attr.data-tests]="'player-two-button'"
+              [disabled]="!($results | async)?.peopleResults?.length || ($starshipDueler | async)?.isLoading || ($peopleDuelers | async)?.isLoading"
               color="primary"
               extended
               mat-fab>
@@ -22,21 +24,17 @@
   </div>
 
   <div *ngIf="fightingResource">
-    <div class="text-center">{{score.roundResult}}</div>
-    <div class="d-flex justify-content-around gap-3">
-      <span>Player one: {{score.playerOne}} points</span>
-
-      <span>Player two: {{score.playerTwo}} points</span>
-    </div>
+    <app-score [score]="score"></app-score>
     <div class="d-flex gap-3">
-      <ng-container *ngIf="fightingResource === RESOURCES.PEOPLE && (personDuelers | async) as personDuelers">
-        <app-resource-card [loading]="personDuelers.isLoading" [person]="personDuelers.data[0]"/>
-        <app-resource-card [loading]="personDuelers.isLoading" [person]="personDuelers.data[1]"/>
+      <ng-container *ngIf="fightingResource === RESOURCES.PEOPLE && ($peopleDuelers | async) as personDuelers">
+        <app-resource-card [loading]="personDuelers.isLoading" [person]="personDuelers.data?.personOne"/>
+        <app-resource-card [loading]="personDuelers.isLoading" [person]="personDuelers.data?.personTwo"/>
       </ng-container>
 
-      <ng-container *ngIf="fightingResource === RESOURCES.STARSHIPS && (starshipDuelers | async) as loadedStarships">
-        <app-resource-card [loading]="loadedStarships.isLoading" [starship]="loadedStarships.data[0]"/>
-        <app-resource-card [loading]="loadedStarships.isLoading" [starship]="loadedStarships.data[1]"/>
+      <ng-container
+        *ngIf="fightingResource === RESOURCES.STARSHIPS && ($starshipDueler | async) as starshipDuelers">
+        <app-resource-card [loading]="starshipDuelers.isLoading" [starship]="starshipDuelers.data?.starshipOne"/>
+        <app-resource-card [loading]="starshipDuelers.isLoading" [starship]="starshipDuelers.data?.starshipTwo"/>
       </ng-container>
     </div>
   </div>

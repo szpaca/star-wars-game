@@ -1,21 +1,15 @@
 <mat-card class="card d-flex align-items-center justify-content-center">
-  <ng-container *ngIf="!loading else spinner">
-    <mat-card-header>
-      <mat-card-title class="text-center">{{person?.name || starship?.name}}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p *ngIf="person?.mass">
-        Person Mass: {{ person?.mass }}
-      </p>
-      <p *ngIf="starship?.crew">
-        Starship Crew: {{ starship?.crew }}
-      </p>
-    </mat-card-content>
+  <ng-container *ngIf="loading else cardContent">
+    <mat-spinner [diameter]="70"/>
   </ng-container>
 </mat-card>
 
-<ng-template #spinner>
-  <mat-spinner [diameter]="70"/>
+<ng-template #cardContent>
+  <mat-card-header>
+    <mat-card-title class="text-center">{{person?.name || starship?.name}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p *ngIf="person?.mass">Person Mass: {{ person?.mass }}</p>
+    <p *ngIf="starship?.crew">Starship Crew: {{ starship?.crew }}</p>
+  </mat-card-content>
 </ng-template>
-
-

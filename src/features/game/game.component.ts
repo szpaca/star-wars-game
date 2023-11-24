@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
@@ -6,96 +6,101 @@ import {ResourceCardComponent} from "./components/resource-card/resource-card.co
 import {GameService} from "../../apis/game-service/game.service";
 import {forkJoin, map, Observable, share, startWith, tap} from "rxjs";
 import {RESOURCES, ROUND_RESULT} from "./models/resource";
-import {Person} from "./models/person";
-import {Starship} from "./models/starship";
-import {getCrewAmount} from "./utils/game-utils";
+import {PeopleDueler} from "./models/person";
+import {StarshipDueler} from "./models/starship";
+import {getCrewAmount, getRandomResultUrl} from "./utils/game-utils";
 import {Result} from "../../shared/models/general.interface";
+import {Score} from "./models/score";
+import {ScoreComponent} from "./components/score/score.component";
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, ResourceCardComponent],
+  imports: [CommonModule, MatButtonModule, MatIconModule, ResourceCardComponent, ScoreComponent],
   templateUrl: './game.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameComponent implements OnInit {
 
-  gameService = inject(GameService);
+  $results: Observable<{ starshipsResults: Result[]; peopleResults: Result[] }>;
+  $starshipDueler: Observable<StarshipDueler>;
+  $peopleDuelers: Observable<PeopleDueler>;
 
-  results: Observable<{ starshipsResults: Result[]; peopleResults: Result[] }>
-  starshipsResults: Result[] = []
-  peopleResults: Result[] = []
-
-  score: { playerOne: number, playerTwo: number, roundResult: ROUND_RESULT | undefined } = {
+  score: Score = {
     playerOne: 0,
     playerTwo: 0,
     roundResult: undefined
-  }
+  };
 
+  fightingResource: RESOURCES | undefined;
   RESOURCES = RESOURCES;
-  fightingResource: RESOURCES;
 
-  starshipDuelers: Observable<{ data: [Starship, Starship]; isLoading: boolean; } | {
-    isLoading: boolean;
-    data: Starship[];
-  }>
-  personDuelers: Observable<{ data: [Person, Person]; isLoading: boolean; } | { isLoading: boolean; data: Person[]; }>
+  private starshipsResults: Result[] = [];
+  private peopleResults: Result[] = [];
 
-  ngOnInit() {
-    this.setResults()
+  constructor(private readonly gameService: GameService) {
   }
 
-  setFightingResource(resource: RESOURCES) {
+  ngOnInit(): void {
+    this.setResults();
+  }
+
+  setFightingResource(resource: RESOURCES): void {
     this.fightingResource = resource;
-    this.starshipDuelers = this.getStarshipDuelers();
-    this.personDuelers = this.getPersonDuelers();
+    if (resource === RESOURCES.PEOPLE) {
+      this.$peopleDuelers = this.getPeopleDuelers();
+    }
+    if (resource === RESOURCES.STARSHIPS) {
+      this.$starshipDueler = this.getStarshipDuelers();
+    }
   }
 
-  private getPersonDuelers(): Observable<{ data: [Person, Person], isLoading: boolean } | {
-    isLoading: boolean;
-    data: Person[]
-  }> {
-    const randomPersonUrl = this.peopleResults[Math.floor(Math.random() * this.peopleResults.length)].url
-    const randomPersonUrl2 = this.peopleResults[Math.floor(Math.random() * this.peopleResults.length)].url
-    return forkJoin([this.gameService.getOnePerson(randomPersonUrl), this.gameService.getOnePerson(randomPersonUrl2)])
+  private getPeopleDuelers(): Observable<PeopleDueler> {
+    return forkJoin({
+      personOne: this.gameService.getOnePerson(getRandomResultUrl(this.peopleResults)),
+      personTwo: this.gameService.getOnePerson(getRandomResultUrl(this.peopleResults))
+    })
       .pipe(
-        tap((data) => this.countScore(Number(data[0].mass), Number(data[1].mass))),
+        tap(({personOne, personTwo}) => this.countScore(Number(personOne.mass), Number(personTwo.mass))),
         map(data => ({data, isLoading: false})),
-        startWith({isLoading: true, data: []}),
-      )
+        share(),
+        startWith({isLoading: true, data: null})
+      );
   }
 
-  private getStarshipDuelers(): Observable<{ data: [Starship, Starship], isLoading: boolean } | {
-    isLoading: boolean;
-    data: Starship[]
-  }> {
-    const randomStarshipUrl = this.starshipsResults[Math.floor(Math.random() * this.starshipsResults.length)].url
-    const randomStarshipUrl2 = this.starshipsResults[Math.floor(Math.random() * this.starshipsResults.length)].url
-    return forkJoin([this.gameService.getOneStarship(randomStarshipUrl), this.gameService.getOneStarship(randomStarshipUrl2)])
+  private getStarshipDuelers(): Observable<StarshipDueler> {
+    return forkJoin({
+      starshipOne: this.gameService.getOneStarship(getRandomResultUrl(this.starshipsResults)),
+      starshipTwo: this.gameService.getOneStarship(getRandomResultUrl(this.starshipsResults))
+    })
       .pipe(
-        tap((data) => this.countScore(getCrewAmount(data[0].crew), getCrewAmount(data[1].crew))),
+        tap(({
+               starshipOne,
+               starshipTwo
+             }) => this.countScore(getCrewAmount(starshipOne.crew), getCrewAmount(starshipTwo.crew))),
         map(data => ({data, isLoading: false})),
-        startWith({isLoading: true, data: []}))
+        share(),
+        startWith({isLoading: true, data: null}));
   }
 
-  private setResults() {
-    this.results = forkJoin({
+  private setResults(): void {
+    this.$results = forkJoin({
       starshipsResults: this.gameService.getStarshipResults(),
       peopleResults: this.gameService.getPeopleResults()
     }).pipe(
       share(),
       tap(({starshipsResults, peopleResults}) => {
         this.starshipsResults = starshipsResults;
-        this.peopleResults = peopleResults
-      }))
+        this.peopleResults = peopleResults;
+      }));
   }
 
-  private countScore(playerOneNum: number, playerTwoNum: number) {
+  private countScore(playerOneNum: number, playerTwoNum: number): void {
     if (playerOneNum > playerTwoNum) {
       this.score.playerOne = this.score.playerOne + 1;
       this.score.roundResult = ROUND_RESULT.PLAYER_ONE;
     } else if (playerOneNum < playerTwoNum) {
-      this.score.playerTwo = this.score.playerTwo + 1
+      this.score.playerTwo = this.score.playerTwo + 1;
       this.score.roundResult = ROUND_RESULT.PLAYER_TWO;
     } else {
       this.score.roundResult = ROUND_RESULT.DRAW;

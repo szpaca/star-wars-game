@@ -18,3 +18,8 @@ export interface Person {
   homeworld: string;
   url: string;
 }
+
+export interface PeopleDueler {
+  data: { personOne: Person; personTwo: Person; } | null;
+  isLoading: boolean;
+}

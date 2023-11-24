@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterOutlet} from '@angular/router';
-import {HeaderComponent} from "../core/header/header.component";
+import {HeaderComponent} from "../core/components/header/header.component";
 
-const Components = [HeaderComponent]
+const Components = [HeaderComponent];
 
 @Component({
   selector: 'app-root',

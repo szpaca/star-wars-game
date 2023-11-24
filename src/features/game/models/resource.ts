@@ -4,7 +4,7 @@ export enum RESOURCES {
 }
 
 export enum ROUND_RESULT {
-  PLAYER_ONE = 'Winner Player One',
-  PLAYER_TWO = 'Winner Player Two',
-  DRAW = 'Draw',
+  PLAYER_ONE = 'Round Winner: Player One!',
+  PLAYER_TWO = 'Round Winner: Player Two!',
+  DRAW = 'Round Draw',
 }

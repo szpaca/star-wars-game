@@ -23,3 +23,8 @@ export interface Starship {
   name: string;
   url: string;
 }
+
+export interface StarshipDueler {
+  data: { starshipOne: Starship; starshipTwo: Starship; } | null;
+  isLoading: boolean;
+}

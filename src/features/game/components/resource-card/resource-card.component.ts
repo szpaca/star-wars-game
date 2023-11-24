@@ -16,11 +16,12 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 export class ResourceCardComponent {
 
   @Input()
-  person: Person | undefined
+  person: Person | undefined;
 
   @Input()
-  starship: Starship | undefined
+  starship: Starship | undefined;
 
   @Input()
-  loading: boolean
+  loading: boolean;
+  
 }
