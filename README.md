@@ -1,6 +1,22 @@
 # StarWarsGame
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.2.
+Using SWAPI: https://www.swapi.tech/
+
+Build an application to select random people or starships and render their details to see
+who would win based on a common attribute.
+
+People have mass and starships have crew. A person with greater mass wins, a
+starship with more crew wins.
+
+The app should render the attributes from the resource in a simple web page that allows
+you to 'play' the game.
+
+Once two cards are displayed the app should declare one of the cards a winner based on
+the higher common attribute.
+
+Having displayed the winning card, the user should be able to play again using an action
+button that repeats the same request.
+
 
 ## Development server
 

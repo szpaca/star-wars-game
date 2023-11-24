@@ -21,7 +21,6 @@ import {ScoreComponent} from "./components/score/score.component";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameComponent implements OnInit {
-
   $results: Observable<{ starshipsResults: Result[]; peopleResults: Result[] }>;
   $starshipDueler: Observable<StarshipDueler>;
   $peopleDuelers: Observable<PeopleDueler>;
@@ -97,6 +96,4 @@ export class GameComponent implements OnInit {
         this.peopleResults = peopleResults;
       }));
   }
-
-
 }

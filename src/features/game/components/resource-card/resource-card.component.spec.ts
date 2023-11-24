@@ -15,7 +15,6 @@ describe('ResourceCardComponent', () => {
 
     fixture = TestBed.createComponent(ResourceCardComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     card = fixture.debugElement.nativeElement.querySelector('mat-card')!;
   });
 
@@ -25,7 +24,6 @@ describe('ResourceCardComponent', () => {
 
   it('should render Person card text', () => {
     component.person = mockPerson;
-
     fixture.detectChanges();
 
     expect(card.textContent).toEqual('personTestNamePerson Mass: 100');
@@ -33,7 +31,6 @@ describe('ResourceCardComponent', () => {
 
   it('should render Starship card text', () => {
     component.starship = mockStarship;
-
     fixture.detectChanges();
 
     expect(card.textContent).toEqual('starshipTestNameStarship Crew: 100');
@@ -41,7 +38,6 @@ describe('ResourceCardComponent', () => {
 
   it('should render spinner', () => {
     component.loading = true;
-
     fixture.detectChanges();
 
     const spinner = fixture.debugElement.nativeElement.querySelector('mat-spinner')!;
@@ -50,7 +46,6 @@ describe('ResourceCardComponent', () => {
 
   it('should not render spinner', () => {
     component.loading = false;
-
     fixture.detectChanges();
 
     const spinner = fixture.debugElement.nativeElement.querySelector('mat-spinner')!;

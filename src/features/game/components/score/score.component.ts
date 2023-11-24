@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Score} from "../../models/score";
 import {MatButtonModule} from "@angular/material/button";
 
@@ -8,7 +8,8 @@ import {MatButtonModule} from "@angular/material/button";
   templateUrl: './score.component.html',
   imports: [
     MatButtonModule
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScoreComponent {
   @Input()

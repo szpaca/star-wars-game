@@ -14,16 +14,15 @@ export const getRandomResultUrl = (array: Result[]): string => {
   return array[Math.floor(Math.random() * array.length)].url;
 };
 
-export const getNewScore = (playerOneNum: number, playerTwoNum: number, score: Score): Score => {
-  const newScore = {...score};
-  if (playerOneNum > playerTwoNum) {
+export const getNewScore = (playerOneResult: number, playerTwoResult: number, score: Score): Score => {
+  const newScore: Score = {...score};
+  if (playerOneResult > playerTwoResult) {
     return {
       ...score,
       playerOne: newScore.playerOne + 1,
       roundResult: ROUND_RESULT.PLAYER_ONE
     };
-
-  } else if (playerOneNum < playerTwoNum) {
+  } else if (playerOneResult < playerTwoResult) {
     return {
       ...score,
       playerTwo: newScore.playerTwo + 1,

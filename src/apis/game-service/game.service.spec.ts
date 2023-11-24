@@ -34,7 +34,6 @@ describe('GameService', () => {
     expect(service).toBeTruthy();
   });
 
-
   it('should call getPeopleResults and return an array of results', () => {
     service.getPeopleResults().subscribe((res) => {
       expect(res).toEqual(mockResultResponse.results);
@@ -158,6 +157,4 @@ describe('GameService', () => {
     const req = httpController.expectOne(oneStarshipUrl);
     req.flush(emsg, {status: 404, statusText: 'Not Found'});
   });
-
-
 });

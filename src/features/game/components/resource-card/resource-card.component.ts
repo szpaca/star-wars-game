@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
@@ -11,10 +11,10 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
   standalone: true,
   imports: [CommonModule, MatCardModule, MatButtonModule, MatProgressSpinnerModule],
   templateUrl: './resource-card.component.html',
-  styleUrl: `./resource-card.component.scss`
+  styleUrl: `./resource-card.component.scss`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResourceCardComponent {
-
   @Input()
   person: Person | undefined;
 
@@ -23,5 +23,4 @@ export class ResourceCardComponent {
 
   @Input()
   loading: boolean;
-  
 }
