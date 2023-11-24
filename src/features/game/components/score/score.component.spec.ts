@@ -22,7 +22,6 @@ describe('ScoreComponent', () => {
     expect(component).toBeTruthy();
   });
 
-
   it('should set correct score', () => {
     const roundResult = fixture.debugElement.nativeElement.querySelector('[data-tests*="round-result"]');
     const playerOnePoints = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-one-points"]');

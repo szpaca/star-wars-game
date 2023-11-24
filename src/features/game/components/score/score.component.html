@@ -1,7 +1,7 @@
-<div [attr.data-tests]="'round-result'" class="text-center h5 pb-2">{{score.roundResult}}</div>
-<div class="d-flex justify-content-around gap-3 h6">
+<h2 [attr.data-tests]="'round-result'" class="text-center pb-2 fw-bold">{{score.roundResult}}</h2>
+<p class="d-flex justify-content-around gap-3 fw-bold">
   <span
     [attr.data-tests]="'player-one-points'">Player one: {{score.playerOne}} {{score.playerOne === 1 ? 'point' : 'points'}}</span>
   <span
     [attr.data-tests]="'player-two-points'">Player two: {{score.playerTwo}} {{score.playerTwo === 1 ? 'point' : 'points'}}</span>
-</div>
+</p>

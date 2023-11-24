@@ -8,6 +8,7 @@ import {mockPerson, mockResults, mockStarship} from "../../shared/mocks/game.moc
 describe('GameComponent', () => {
   let component: GameComponent;
   let fixture: ComponentFixture<GameComponent>;
+
   let starshipsButton: HTMLButtonElement;
   let peopleButton: HTMLButtonElement;
   let cardsContainer: HTMLElement;

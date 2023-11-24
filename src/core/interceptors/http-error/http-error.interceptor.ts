@@ -6,11 +6,11 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
 
-  constructor(private _snackBar: MatSnackBar) {
+  constructor(private readonly snackBar: MatSnackBar) {
   }
 
   openSnackBar(message: string) {
-    this._snackBar.open(message, 'Close');
+    this.snackBar.open(message, 'Close');
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

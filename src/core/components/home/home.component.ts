@@ -9,5 +9,4 @@ import {GameComponent} from "../../../features/game/game.component";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
-
 }

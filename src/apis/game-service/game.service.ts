@@ -38,5 +38,4 @@ export class GameService {
       .pipe(map(res => res.result));
     return personResource.pipe(map(res => res.properties));
   }
-
 }

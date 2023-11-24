@@ -3,12 +3,12 @@ import {mockResults} from "../../../shared/mocks/game.mocks";
 import {ROUND_RESULT} from "../models/resource";
 
 describe('GameUtils', () => {
-  it('should call getCrewAmount and return crew amount as number', () => {
+  it('should call getCrewAmount with string with dash and return crew amount as number', () => {
     const crewAmountStringRange = '30-165';
     expect(getCrewAmount(crewAmountStringRange)).toBe(165);
   });
 
-  it('should call getCrewAmount and return crew amount as number', () => {
+  it('should call getCrewAmount with string with comma and return crew amount as number', () => {
     const crewAmountStringWithComma = '40,500';
     expect(getCrewAmount(crewAmountStringWithComma)).toBe(40500);
   });

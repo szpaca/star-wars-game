@@ -1,5 +1,5 @@
 import {mockResultResponse} from "../../src/shared/mocks/game.mocks";
-import {peopleGameResponses, starshipGameResponses} from "./responses";
+import {peopleGameResponses, starshipGameResponses} from "../mocks/responses";
 
 describe('Game setup', () => {
 

@@ -22,8 +22,8 @@ import {ScoreComponent} from "./components/score/score.component";
 })
 export class GameComponent implements OnInit {
   $results: Observable<{ starshipsResults: Result[]; peopleResults: Result[] }>;
-  $starshipDueler: Observable<StarshipDueler>;
-  $peopleDuelers: Observable<PeopleDueler>;
+  $starshipDueler: Observable<StarshipDueler> = new Observable<StarshipDueler>();
+  $peopleDuelers: Observable<PeopleDueler> = new Observable<PeopleDueler>();
 
   score: Score = {
     playerOne: 0,
@@ -31,7 +31,7 @@ export class GameComponent implements OnInit {
     roundResult: undefined
   };
 
-  fightingResource: RESOURCES | undefined;
+  fightingResource: RESOURCES | undefined = undefined;
   RESOURCES = RESOURCES;
 
   private starshipsResults: Result[] = [];
