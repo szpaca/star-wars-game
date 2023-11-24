@@ -5,12 +5,12 @@ import {RESOURCES, ROUND_RESULT} from "./models/resource";
 import {of} from "rxjs";
 import {mockPerson, mockResults, mockStarship} from "../../shared/mocks/game.mocks";
 
-
 describe('GameComponent', () => {
   let component: GameComponent;
   let fixture: ComponentFixture<GameComponent>;
-  let playerOneButton: HTMLButtonElement;
-  let playerTwoButton: HTMLButtonElement;
+  let starshipsButton: HTMLButtonElement;
+  let peopleButton: HTMLButtonElement;
+  let cardsContainer: HTMLElement;
 
   let gameServiceSpy: jasmine.SpyObj<GameService>;
 
@@ -41,12 +41,12 @@ describe('GameComponent', () => {
     gameServiceSpy.getPeopleResults.and.returnValue(of(mockResults));
     gameServiceSpy.getStarshipResults.and.returnValue(of(mockResults));
     fixture.detectChanges();
-    playerOneButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-one-button"]');
-    playerTwoButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-two-button"]');
+    starshipsButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="starships-button"]');
+    peopleButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="people-button"]');
 
     expect(component.fightingResource).toBe(undefined);
 
-    playerOneButton.click();
+    starshipsButton.click();
     expect(component.fightingResource).toBe(RESOURCES.STARSHIPS);
   });
 
@@ -54,12 +54,12 @@ describe('GameComponent', () => {
     gameServiceSpy.getPeopleResults.and.returnValue(of(mockResults));
     gameServiceSpy.getStarshipResults.and.returnValue(of(mockResults));
     fixture.detectChanges();
-    playerOneButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-one-button"]');
-    playerTwoButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-two-button"]');
+    starshipsButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="starships-button"]');
+    peopleButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="people-button"]');
 
     expect(component.fightingResource).toBe(undefined);
 
-    playerTwoButton.click();
+    peopleButton.click();
     expect(component.fightingResource).toBe(RESOURCES.PEOPLE);
   });
 
@@ -68,66 +68,78 @@ describe('GameComponent', () => {
     gameServiceSpy.getOneStarship.and.returnValue(of(mockStarship));
 
     fixture.detectChanges();
-    playerOneButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-one-button"]');
+    starshipsButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="starships-button"]');
 
-    playerOneButton.click();
+    starshipsButton.click();
     fixture.detectChanges();
 
     expect(component.score.roundResult).toBe(ROUND_RESULT.DRAW);
   });
 
-  it('should set roundResult to PLAYER TWO WINNER', () => {
+  it('should set roundResult to PLAYER TWO WINNER when people fighting and set correct card', () => {
     gameServiceSpy.getOnePerson.and.returnValue(of(mockPerson));
     gameServiceSpy.getOneStarship.and.returnValues(of(mockStarship), of({...mockStarship, crew: '200'}));
 
     fixture.detectChanges();
-    playerOneButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-one-button"]');
+    starshipsButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="starships-button"]');
 
-    playerOneButton.click();
+    starshipsButton.click();
     fixture.detectChanges();
 
+    cardsContainer = fixture.debugElement.nativeElement.querySelector('[data-tests*="cards-container"]');
+
     expect(component.score.roundResult).toBe(ROUND_RESULT.PLAYER_TWO);
+    expect(cardsContainer.textContent).toContain('starship');
   });
 
 
-  it('should set roundResult to PLAYER TWO WINNER', () => {
+  it('should set roundResult to PLAYER ONE WINNER when people fighting and set correct card', () => {
     gameServiceSpy.getOnePerson.and.returnValue(of(mockPerson));
     gameServiceSpy.getOneStarship.and.returnValues(of(mockStarship), of({...mockStarship, crew: '50'}));
 
     fixture.detectChanges();
-    playerOneButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-one-button"]');
+    starshipsButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="starships-button"]');
 
-    playerOneButton.click();
+    starshipsButton.click();
     fixture.detectChanges();
 
+    cardsContainer = fixture.debugElement.nativeElement.querySelector('[data-tests*="cards-container"]');
+
     expect(component.score.roundResult).toBe(ROUND_RESULT.PLAYER_ONE);
+    expect(cardsContainer.textContent).toContain('starship');
   });
 
 
-  it('should set roundResult to PLAYER TWO WINNER', () => {
+  it('should set roundResult to PLAYER TWO WINNER when starships fighting and set correct card', () => {
     gameServiceSpy.getOneStarship.and.returnValue(of(mockStarship));
     gameServiceSpy.getOnePerson.and.returnValues(of(mockPerson), of({...mockPerson, mass: '200'}));
 
     fixture.detectChanges();
-    playerOneButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-two-button"]');
+    starshipsButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="people-button"]');
 
-    playerOneButton.click();
+    starshipsButton.click();
     fixture.detectChanges();
 
+    cardsContainer = fixture.debugElement.nativeElement.querySelector('[data-tests*="cards-container"]');
+
     expect(component.score.roundResult).toBe(ROUND_RESULT.PLAYER_TWO);
+    expect(cardsContainer.textContent).toContain('person');
   });
 
 
-  it('should set roundResult to PLAYER TWO WINNER', () => {
+  it('should set roundResult to PLAYER ONE WINNER when starships fighting and set correct card', () => {
     gameServiceSpy.getOneStarship.and.returnValue(of(mockStarship));
     gameServiceSpy.getOnePerson.and.returnValues(of(mockPerson), of({...mockPerson, mass: '50'}));
 
     fixture.detectChanges();
-    playerOneButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="player-two-button"]');
+    starshipsButton = fixture.debugElement.nativeElement.querySelector('[data-tests*="people-button"]');
 
-    playerOneButton.click();
+    starshipsButton.click();
     fixture.detectChanges();
 
+    cardsContainer = fixture.debugElement.nativeElement.querySelector('[data-tests*="cards-container"]');
+
     expect(component.score.roundResult).toBe(ROUND_RESULT.PLAYER_ONE);
+    expect(cardsContainer.textContent).toContain('person');
   });
 });

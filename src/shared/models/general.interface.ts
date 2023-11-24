@@ -1,6 +1,6 @@
 export interface GeneralResponse {
   message: string;
-  result: never;
+  result: any;
 }
 
 export interface ResultResponse {

@@ -5,10 +5,10 @@ import {MatIconModule} from "@angular/material/icon";
 import {ResourceCardComponent} from "./components/resource-card/resource-card.component";
 import {GameService} from "../../apis/game-service/game.service";
 import {forkJoin, map, Observable, share, startWith, tap} from "rxjs";
-import {RESOURCES, ROUND_RESULT} from "./models/resource";
+import {RESOURCES} from "./models/resource";
 import {PeopleDueler} from "./models/person";
 import {StarshipDueler} from "./models/starship";
-import {getCrewAmount, getRandomResultUrl} from "./utils/game-utils";
+import {getCrewAmount, getNewScore, getRandomResultUrl} from "./utils/game-utils";
 import {Result} from "../../shared/models/general.interface";
 import {Score} from "./models/score";
 import {ScoreComponent} from "./components/score/score.component";
@@ -61,7 +61,10 @@ export class GameComponent implements OnInit {
       personTwo: this.gameService.getOnePerson(getRandomResultUrl(this.peopleResults))
     })
       .pipe(
-        tap(({personOne, personTwo}) => this.countScore(Number(personOne.mass), Number(personTwo.mass))),
+        tap(({
+               personOne,
+               personTwo
+             }) => this.score = getNewScore(getCrewAmount(personOne.mass), getCrewAmount(personTwo.mass), this.score)),
         map(data => ({data, isLoading: false})),
         share(),
         startWith({isLoading: true, data: null})
@@ -77,7 +80,7 @@ export class GameComponent implements OnInit {
         tap(({
                starshipOne,
                starshipTwo
-             }) => this.countScore(getCrewAmount(starshipOne.crew), getCrewAmount(starshipTwo.crew))),
+             }) => this.score = getNewScore(getCrewAmount(starshipOne.crew), getCrewAmount(starshipTwo.crew), this.score)),
         map(data => ({data, isLoading: false})),
         share(),
         startWith({isLoading: true, data: null}));
@@ -95,15 +98,5 @@ export class GameComponent implements OnInit {
       }));
   }
 
-  private countScore(playerOneNum: number, playerTwoNum: number): void {
-    if (playerOneNum > playerTwoNum) {
-      this.score.playerOne = this.score.playerOne + 1;
-      this.score.roundResult = ROUND_RESULT.PLAYER_ONE;
-    } else if (playerOneNum < playerTwoNum) {
-      this.score.playerTwo = this.score.playerTwo + 1;
-      this.score.roundResult = ROUND_RESULT.PLAYER_TWO;
-    } else {
-      this.score.roundResult = ROUND_RESULT.DRAW;
-    }
-  }
+
 }

@@ -3,7 +3,7 @@
     <h2>CHOOSE YOUR RESOURCE</h2>
     <div class="d-flex gap-3">
       <button (click)="setFightingResource(RESOURCES.STARSHIPS)"
-              [attr.data-tests]="'player-one-button'"
+              [attr.data-tests]="'starships-button'"
               [disabled]="!($results | async)?.starshipsResults?.length || ($starshipDueler | async)?.isLoading || ($peopleDuelers | async)?.isLoading"
               color="primary"
               extended mat-fab>
@@ -12,7 +12,7 @@
       </button>
 
       <button (click)="setFightingResource(RESOURCES.PEOPLE)"
-              [attr.data-tests]="'player-two-button'"
+              [attr.data-tests]="'people-button'"
               [disabled]="!($results | async)?.peopleResults?.length || ($starshipDueler | async)?.isLoading || ($peopleDuelers | async)?.isLoading"
               color="primary"
               extended
@@ -23,12 +23,12 @@
     </div>
   </div>
 
-  <div *ngIf="fightingResource">
+  <div *ngIf="fightingResource" [attr.data-tests]="'resource-container'" class="mt-4">
     <app-score [score]="score"></app-score>
-    <div class="d-flex gap-3">
-      <ng-container *ngIf="fightingResource === RESOURCES.PEOPLE && ($peopleDuelers | async) as personDuelers">
-        <app-resource-card [loading]="personDuelers.isLoading" [person]="personDuelers.data?.personOne"/>
-        <app-resource-card [loading]="personDuelers.isLoading" [person]="personDuelers.data?.personTwo"/>
+    <div [attr.data-tests]="'cards-container'" class="d-flex gap-3">
+      <ng-container *ngIf="fightingResource === RESOURCES.PEOPLE && ($peopleDuelers | async) as peopleDuelers">
+        <app-resource-card [loading]="peopleDuelers.isLoading" [person]="peopleDuelers.data?.personOne"/>
+        <app-resource-card [loading]="peopleDuelers.isLoading" [person]="peopleDuelers.data?.personTwo"/>
       </ng-container>
 
       <ng-container

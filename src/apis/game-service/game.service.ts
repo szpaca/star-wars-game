@@ -18,25 +18,25 @@ export class GameService {
   }
 
   getStarshipResults(): Observable<Result[]> {
-    return this.http.get<ResultResponse>(`${this.swapi}/starships`).pipe(map(res => res.results))
+    return this.http.get<ResultResponse>(`${this.swapi}/starships`).pipe(map(res => res.results));
   }
 
   getPeopleResults(): Observable<Result[]> {
-    return this.http.get<ResultResponse>(`${this.swapi}/people`).pipe(map(res => res.results))
+    return this.http.get<ResultResponse>(`${this.swapi}/people`).pipe(map(res => res.results));
   }
 
   getOneStarship(url: string): Observable<Starship> {
     const starshipResource: Observable<StarshipResource> = this.http
       .get<GeneralResponse>(url)
-      .pipe(map(res => res.result))
-    return starshipResource.pipe(map(res => res.properties))
+      .pipe(map(res => res.result));
+    return starshipResource.pipe(map(res => res.properties));
   }
 
   getOnePerson(url: string): Observable<Person> {
     const personResource: Observable<PersonResource> = this.http
       .get<GeneralResponse>(url)
-      .pipe(map(res => res.result))
-    return personResource.pipe(map(res => res.properties))
+      .pipe(map(res => res.result));
+    return personResource.pipe(map(res => res.properties));
   }
 
 }
